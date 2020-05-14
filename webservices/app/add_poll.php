@@ -19,31 +19,35 @@ $sql = "INSERT INTO Poll (groupId, question, endTime)
 		VALUES ($group_id, $question, $end_time)";
 
 try {
-    $stmt = $this->conn->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
 
     //get id
-    $poll_id = $this->conn->lastInsertId();
+    $poll_id = $conn->lastInsertId();
 
-    addOptions($group_id, $poll_id, $options);
+    addOptions($group_id, (int)$poll_id, $options, $conn);
 
 
-   //echo "poll added";
+    $return_msg = array("status" => 1,
+					   "poll_id" => (int)$poll_id);
+	echo json_encode($return_msg);
+	
 } catch (Exception $e) {
-    //echo "error" . $e->getMessage();
+   $return_msg = array("status" => 0,
+					   "msg" => "poll not added");
+	echo json_encode($return_msg);
 }
-
 
 $db->closeConnection();
 
 
-function addOptions($group_id, $poll_id, $options){
+function addOptions($group_id, $poll_id, $options, $conn){
     $j = 1;
     foreach($options as &$value){
-        $sql = "INSERT INTO OptionToPoll (optionId, pollId, _option)
+       $sql = "INSERT INTO OptionToPoll (optionId, pollId, _option)
 					VALUES ($j, $poll_id, $value)";
 
-            $stmt = $this->conn->prepare($sql);
+            $stmt = $conn->prepare($sql);
             $stmt->execute();
             $j = $j + 1;
         }
