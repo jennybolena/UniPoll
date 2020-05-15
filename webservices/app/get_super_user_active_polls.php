@@ -12,9 +12,7 @@ include_once '../util/objects/config/Database.php';
 $db = new Database();
 $conn = $db->getConnection();
 
-
-$timest = date('u');
-
+$dd = date(format,timestamp);
 $sql = "SELECT * from Poll 
 		WHERE groupId IN
 		(SELECT id FROM GroupInfo 
@@ -32,24 +30,28 @@ try {
     if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $row_item = array(
-                "poll_id" => $id,
-                "group_id" => $groupId,
-                "question" => $question,
-                "start_time" => $startTime,
-                "end_time" => $endTime,
-            );
-            array_push($all_data['data'], $row_item);
-        }
+			$end_time = strtotime($endTime);
+			$curtime = time();
+            if($end_time - $curtime > 0){
+				$row_item = array(
+				"poll_id" => (int)$id,
+				"group_id" => $groupId,
+				"question" => $question,
+				"start_time" => $startTime,
+				"end_time" => $endTime
+			     );
+				array_push($all_data['data'], $row_item);
+			}
+		}
     }
 
-    echo json_encode($all_data);
+   echo json_encode($all_data);
 } catch (Exception $e) {
-	$return_msg = array("status" => 0, "msg" => "super user polls could bot be retrieved");
+	$return_msg = array("status" => 0, "msg" => "super user active polls could bot be retrieved");
     echo json_encode($return_msg);
 }
 
-
+echo "dd";
 $db->closeConnection();
 
 ?>
