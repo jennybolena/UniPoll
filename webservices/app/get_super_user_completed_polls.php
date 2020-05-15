@@ -32,7 +32,7 @@ try {
             extract($row);
 			$end_time = strtotime($endTime);
 			$curtime = time();
-            if($end_time - $curtime > 0){
+            if($end_time - $curtime <= 0){
 				$row_item = array(
 				"poll_id" => (int)$id,
 				"group_id" => $groupId,

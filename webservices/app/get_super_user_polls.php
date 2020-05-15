@@ -25,22 +25,28 @@ try {
 
     $all_data = array();
     $all_data['status'] = 1;
-    $all_data['data'] = array();
+    $all_data['active_polls'] = array();
+    $all_data['completed_polls'] = array();
 
     if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
+			
+            
+			$row_item = array(
+			"poll_id" => (int)$id,
+			"group_id" => $groupId,
+			"question" => $question,
+			"start_time" => $startTime,
+			"end_time" => $endTime
+			 );
+				
 			$end_time = strtotime($endTime);
-			$curtime = time();
-            if($end_time - $curtime > 0){
-				$row_item = array(
-				"poll_id" => (int)$id,
-				"group_id" => $groupId,
-				"question" => $question,
-				"start_time" => $startTime,
-				"end_time" => $endTime
-			     );
-				array_push($all_data['data'], $row_item);
+			$curtime = time();			
+			if($end_time - $curtime > 0){
+				array_push($all_data['active_polls'], $row_item);
+			}else{
+				array_push($all_data['completed_polls'], $row_item);
 			}
 		}
     }
