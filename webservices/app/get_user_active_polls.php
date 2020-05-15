@@ -39,12 +39,12 @@ try {
 			$curtime = time();
             if($end_time - $curtime > 0){
 				$row_item = array(
-					"poll_id" => (int)$id,
+					"id" => (int)$id,
 					"author" => $author,	
 					"tag" => $groupName,
-					"question" => $question,
-					"start_time" => $startTime,
-					"end_time" => $endTime
+					"title" => $question,
+					"time_created" => $startTime,
+					"time_ended" => $endTime
 				);
 				
 				array_push($all_data['data'], $row_item);

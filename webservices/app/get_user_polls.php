@@ -38,12 +38,12 @@ try {
 			
             
 			$row_item = array(
-			"poll_id" => (int)$id,
-			"author" => $author,	
-			"tag" => $groupName,
-			"question" => $question,
-			"start_time" => $startTime,
-			"end_time" => $endTime
+					"id" => (int)$id,
+					"author" => $author,	
+					"tag" => $groupName,
+					"title" => $question,
+					"time_created" => $startTime,
+					"time_ended" => $endTime
 			 );
 				
 			$end_time = strtotime($endTime);
