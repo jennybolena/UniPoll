@@ -12,11 +12,15 @@ include_once '../util/objects/config/Database.php';
 $db = new Database();
 $conn = $db->getConnection();
 
-$dd = date(format,timestamp);
-$sql = "SELECT * from Poll 
-		WHERE groupId IN
-		(SELECT id FROM GroupInfo 
-			WHERE owner = $user_id)";
+
+$sql = "SELECT GroupInfo.name, temp.* FROM GroupInfo
+		INNER JOIN (
+				SELECT * from Poll 
+				WHERE groupId IN
+				(SELECT id FROM GroupInfo 
+				WHERE owner = $user_id)
+				) as temp
+		ON temp.groupId = GroupInfo.id";
 
 try {
     $stmt = $conn->prepare($sql);
@@ -36,6 +40,7 @@ try {
 			$row_item = array(
 			"poll_id" => (int)$id,
 			"group_id" => $groupId,
+			"group_name" => $name,
 			"question" => $question,
 			"start_time" => $startTime,
 			"end_time" => $endTime
