@@ -47,7 +47,7 @@ try {
 
    echo json_encode($all_data);
 } catch (Exception $e) {
-	$return_msg = array("status" => 0, "msg" => "super user active polls could bot be retrieved");
+	$return_msg = array("status" => 0, "msg" => "super user active polls could not be retrieved");
     echo json_encode($return_msg);
 }
 
