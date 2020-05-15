@@ -58,10 +58,12 @@ try {
 	$sql = "SELECT question FROM Poll WHERE id = $poll_id"; 
 	$stmt = $conn->prepare($sql);
     $stmt->execute();
-	
-	 if ($num == 1) {
+	$num = $stmt->rowCount();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	extract($row);
+	if ($num == 1) {
 		$all_data['question'] = $question;
-	 }
+	}
 	 
 	 //get poll author
 	 $sql = "SELECT UserInfo.name as author FROM UserInfo 
@@ -72,7 +74,9 @@ try {
 			ON UserInfo.id = tempo.owner"; 
 	 $stmt = $conn->prepare($sql);
      $stmt->execute();
-	
+	 $num = $stmt->rowCount();
+	 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+	 extract($row);
 	 if ($num == 1) {
 		$all_data['author'] = $author;
 	 }
