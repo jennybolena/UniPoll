@@ -12,14 +12,17 @@ $conn = $db->getConnection();
 
 
 //see if user has voted
-$sql = "SELECT optionId from Vote WHERE pollId = $poll_id AND userId = $user_id";
+$sql = "SELECT optionId from Vote WHERE pollId = $poll_id AND userId = $user_id"; 
 
 
 try {
     $all_data = array();
     $all_data['status'] = 1;
-    $all_data['data'] = array();
-    $all_data['user_vote_id'];
+    $all_data['poll_id'] = (int)$poll_id;
+    $all_data['question'];
+    $all_data['author'];
+    $all_data['poll_stats'] = array();
+    $all_data['user_vote_id'] = 0;
     
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -28,9 +31,7 @@ try {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         extract($row);
         $all_data['user_vote_id'] = (int)$optionId;
-    }else{
-		 $all_data['user_vote_id'] = 0;
-	}
+    }
 	
 	
 	 $sql = "SELECT optionId, _option, COUNT(voteOptionId) as totalVotes FROM 
@@ -49,13 +50,34 @@ try {
 				"option" => $_option,
 				"votes" => (int)$totalVotes
 			);
-			array_push($all_data['data'], $row_item);
+			array_push($all_data['poll_stats'], $row_item);
         }	
     }
 	
+	//get poll question
+	$sql = "SELECT question FROM Poll WHERE id = $poll_id"; 
+	$stmt = $conn->prepare($sql);
+    $stmt->execute();
+	
+	 if ($num == 1) {
+		$all_data['question'] = $question;
+	 }
+	 
+	 //get poll author
+	 $sql = "SELECT UserInfo.name as author FROM UserInfo 
+			INNER JOIN 
+			(SELECT owner from GroupInfo INNER JOIN
+			(select groupId from Poll Where id = $poll_id) as temp
+			ON temp.groupId = GroupInfo.id) as tempo
+			ON UserInfo.id = tempo.owner"; 
+	 $stmt = $conn->prepare($sql);
+     $stmt->execute();
+	
+	 if ($num == 1) {
+		$all_data['author'] = $author;
+	 }
+	
 	echo json_encode($all_data);
-	
-	
 } catch(Exception $e){
     $return_msg = array("status" => 0, "msg" => "poll details cannot be retrieved");
     echo json_encode($return_msg);
