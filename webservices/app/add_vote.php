@@ -26,7 +26,7 @@ $return_msg;
 try{
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':user_id', $user_id);
-	$stmt->bindParam(':poll_id', (int)$poll_id);
+	$stmt->bindParam(':poll_id', $poll_id);
     $stmt->execute();
     $num = $stmt->rowCount();
 
