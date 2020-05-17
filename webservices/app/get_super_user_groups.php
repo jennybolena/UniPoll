@@ -11,9 +11,10 @@ include_once '../util/objects/config/Database.php';
 $db = new Database();
 $conn = $db->getConnection();
 
-$sql = "SELECT id, name FROM GroupInfo WHERE owner = $user_id";
+$sql = "SELECT id, name FROM GroupInfo WHERE owner = :user_id";
 try{
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $num = $stmt->rowCount();
 
@@ -34,7 +35,7 @@ try{
     }
     echo json_encode($all_data);
 }catch (Exception $e){
-    $return_msg = array("status" => 0, "msg" => "usr groups cannot be retrieved");
+    $return_msg = array("status" => 0, "msg" => "user groups cannot be retrieved");
     echo json_encode($return_msg);
 }
 
