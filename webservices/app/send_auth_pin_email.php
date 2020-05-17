@@ -32,7 +32,7 @@ header("Content-type:application/json");
     if(!$mail->send()){
         echo json_encode(["status" => "0", "error_msg" => "mail wan not sent"]);
     }else{
-        echo json_encode(["status" => "1", "pin" => (int)$pin]);
+        echo json_encode(["status" => "1", "pin" => $pin]);
     }
 
     // Generates a PIN
