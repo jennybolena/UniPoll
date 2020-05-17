@@ -23,10 +23,13 @@ class Vote
     public function addVote()
     {
         $sql = "INSERT INTO Vote (optionId, pollId, userId)
-		VALUES ($this->option_id, $this->poll_id, $this->user_id)";
+		VALUES (:option_id, :poll_id, :user_id)";
 
         try {
             $stmt = $this->conn->prepare($sql);
+			$stmt->bindParam(':user_id', $this->user_id);
+			$stmt->bindParam(':poll_id', (int)$this->poll_id);
+			$stmt->bindParam(':option_id', (int)$this->option_id);
             $stmt->execute();
 
             echo "vote added";
@@ -38,11 +41,14 @@ class Vote
     public function updateVote()
     {
         $sql = "UPDATE Vote 
-                SET optionId = $this->option_id
-                WHERE pollId = $this->poll_id AND userId = $this->user_id";
+                SET optionId = :option_id
+                WHERE pollId = :poll_id AND userId = :user_id";
 
         try {
             $stmt = $this->conn->prepare($sql);
+			$stmt->bindParam(':user_id', $this->user_id);
+			$stmt->bindParam(':poll_id', (int)$this->poll_id);
+			$stmt->bindParam(':option_id', (int)$this->option_id);
             $stmt->execute();
 
             echo "vote updated";
@@ -52,7 +58,7 @@ class Vote
     }
 
 
-    public function getVote()
+   /* public function getVote()
     {
         $sql = "SELECT * from Vote 
                 where userId = $this->user_id AND pollId = $this->poll_id";
@@ -83,5 +89,5 @@ class Vote
         } catch (Exception $e) {
             echo "error" . $e->getMessage();
         }
-    }
+    }*/
 }

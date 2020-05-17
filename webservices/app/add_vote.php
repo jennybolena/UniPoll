@@ -20,11 +20,13 @@ $db = new Database();
 $conn = $db->getConnection();
 
 //check if user has already voted for this poll
-$sql = "SELECT * FROM Vote WHERE userId = $user_id AND pollId = $poll_id";
+$sql = "SELECT * FROM Vote WHERE userId = :user_id AND pollId = :poll_id";
 
 $return_msg;
 try{
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
+	$stmt->bindParam(':poll_id', (int)$poll_id);
     $stmt->execute();
     $num = $stmt->rowCount();
 
