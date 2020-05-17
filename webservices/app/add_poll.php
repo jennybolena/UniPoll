@@ -30,6 +30,22 @@ try {
 
     $return_msg = array("status" => 1,
 					   "poll_id" => (int)$poll_id);
+					   
+	//get all user's tokens (who are enrolled in this group)
+	$sql = "";
+	$stmt = $conn->prepare($sql);
+    $stmt->execute();
+	$num = $stmt->rowCount();
+
+
+    if($num != 0){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+			sendPushNotification($token, $message);
+		}
+	}
+			
+					   
 	echo json_encode($return_msg);
 	
 } catch (Exception $e) {
@@ -51,6 +67,24 @@ function addOptions($group_id, $poll_id, $options, $conn){
             $stmt->execute();
             $j = $j + 1;
         }
+}
+
+function sendPushNotification($token, $message){
+	$apiKey = '';
+	$fields = array('to' => $token, 'notification' => $message);
+	$headers = array('Authorization: key=' .apiKey, 'Content-Type: application/json');
+	$url = '';
+	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+	
+	curl_exec($ch);
+	curl_close($ch);
 }
 
 ?>
