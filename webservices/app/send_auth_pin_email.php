@@ -12,7 +12,7 @@ header("Content-type:application/json");
     include_once '../util/objects/config/Database.php';
 
     // Generate PIN
-    $pin = generatePIN(5);
+    $pin = generatePIN(4);
 
     // Send email
     $mail = new PHPMailer;
