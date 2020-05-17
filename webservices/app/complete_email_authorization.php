@@ -2,10 +2,10 @@
 header("Content-type:application/json");
 
 // Get student email
-$email = isset($_POST['email']) ? $_POST['email'] : die();
+$email = isset($_POST['email']) ? $_POST['email'] : die("email is missing");
 
 // Get mobile push notification token
-$token = isset($_POST['token']) ? $_POST['token'] : die();
+$token = isset($_POST['token']) ? $_POST['token'] : die("token in missing");
 
 $user_id = hashMail($email);
 

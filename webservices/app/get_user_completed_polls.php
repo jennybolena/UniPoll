@@ -1,7 +1,7 @@
 <?php
 header("Content-type:application/json");
 
-$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die();
+$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die("user_is is missing");
 
 //include
 include_once '../util/objects/config/Database.php';

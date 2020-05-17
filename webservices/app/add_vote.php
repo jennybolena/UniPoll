@@ -2,13 +2,13 @@
 header("Content-type:application/json");
 
 // Get student id
-$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die();
+$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die("user_id is missing");
 
 // Get option id
-$option_id = isset($_POST['option_id']) ? $_POST['option_id'] : die();
+$option_id = isset($_POST['option_id']) ? $_POST['option_id'] : die("option_id is missing");
 
 // Get poll id
-$poll_id = isset($_POST['poll_id']) ? $_POST['poll_id'] : die();
+$poll_id = isset($_POST['poll_id']) ? $_POST['poll_id'] : die("poll_id ");
 
 //include
 include_once '../util/objects/Vote.php';

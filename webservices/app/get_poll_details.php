@@ -1,9 +1,9 @@
 <?php
 header("Content-type:application/json");
 
-$poll_id = isset($_POST['poll_id']) ? $_POST['poll_id'] : die();
+$poll_id = isset($_POST['poll_id']) ? $_POST['poll_id'] : die("poll_id is missing");
 
-$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die();
+$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : die("user_id is missing");
 
 //connect to db
 include_once '../util/objects/config/Database.php';

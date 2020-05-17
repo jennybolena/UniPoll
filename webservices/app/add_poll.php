@@ -1,14 +1,13 @@
 <?php
 header("Content-type:application/json");
 
-$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : die();
-$question = isset($_POST['question']) ? $_POST['question'] : die();
-$end_time = isset($_POST['end_time']) ? $_POST['end_time'] : die();
-$options = isset($_POST['options']) ? $_POST['options'] : die();
+$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : die("group_id is missing");
+$question = isset($_POST['question']) ? $_POST['question'] : die("question is missing");
+$end_time = isset($_POST['end_time']) ? $_POST['end_time'] : die("end_time is missing");
+$options = isset($_POST['options']) ? $_POST['options'] : die("option is missing");
 
 //include
 include_once '../util/objects/config/Database.php';
-
 
 //connection to db
 $db = new Database();

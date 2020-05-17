@@ -1,7 +1,7 @@
 <?php
 header("Content-type:application/json");
     // Get student email
-    $email = isset($_POST['email']) ? $_POST['email'] : die();
+    $email = isset($_POST['email']) ? $_POST['email'] : die("email is missing");
 
     // Include third party library classes
     use PHPMailer\PHPMailer\PHPMailer;
