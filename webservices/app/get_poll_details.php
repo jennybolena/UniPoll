@@ -12,7 +12,7 @@ $conn = $db->getConnection();
 
 
 //see if user has voted
-$sql = "SELECT optionId from Vote WHERE pollId = $poll_id AND userId = $user_id"; 
+$sql = "SELECT optionId from Vote WHERE pollId = :poll_id AND userId = :user_id"; 
 
 
 try {
@@ -25,6 +25,8 @@ try {
     $all_data['user_vote_id'] = 0;
     
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
+	$stmt->bindParam(':poll_id', $poll_id);
     $stmt->execute();
     $num = $stmt->rowCount();
     if($num == 1){
@@ -37,9 +39,10 @@ try {
 	 $sql = "SELECT optionId, _option, COUNT(voteOptionId) as totalVotes FROM 
 			(SELECT OptionToPoll.optionId, OptionToPoll._option, Vote.optionId as voteOptionId FROM OptionToPoll 
 			 LEFT JOIN Vote on (OptionToPoll.pollId = Vote.pollId AND OptionToPoll.optionId = Vote.optionId) 
-			 WHERE OptionToPoll.pollId = $poll_id) as temp
+			 WHERE OptionToPoll.pollId = :poll_id) as temp
 			 GROUP By (optionId)";
 	 $stmt = $conn->prepare($sql);
+	 $stmt->bindParam(':poll_id', $poll_id);
      $stmt->execute();
      $num = $stmt->rowCount();
      if ($num > 0) {
@@ -55,8 +58,9 @@ try {
     }
 	
 	//get poll question
-	$sql = "SELECT question FROM Poll WHERE id = $poll_id"; 
+	$sql = "SELECT question FROM Poll WHERE id = :poll_id"; 
 	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':poll_id', $poll_id);
     $stmt->execute();
 	$num = $stmt->rowCount();
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -69,10 +73,11 @@ try {
 	 $sql = "SELECT UserInfo.name as author FROM UserInfo 
 			INNER JOIN 
 			(SELECT owner from GroupInfo INNER JOIN
-			(select groupId from Poll Where id = $poll_id) as temp
+			(select groupId from Poll Where id = :poll_id) as temp
 			ON temp.groupId = GroupInfo.id) as tempo
 			ON UserInfo.id = tempo.owner"; 
 	 $stmt = $conn->prepare($sql);
+	 $stmt->bindParam(':poll_id', $poll_id);
      $stmt->execute();
 	 $num = $stmt->rowCount();
 	 $row = $stmt->fetch(PDO::FETCH_ASSOC);
