@@ -38,6 +38,7 @@ try {
 	$num = $stmt->rowCount();
 
 
+	$message = array("question" => $question);
     if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
