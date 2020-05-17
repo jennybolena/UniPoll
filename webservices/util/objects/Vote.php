@@ -24,18 +24,12 @@ class Vote
     {
         $sql = "INSERT INTO Vote (optionId, pollId, userId)
 		VALUES (:option_id, :poll_id, :user_id)";
-
-        try {
+		
             $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':user_id', $this->user_id);
 			$stmt->bindParam(':poll_id', $this->poll_id);
 			$stmt->bindParam(':option_id',$this->option_id);
             $stmt->execute();
-
-            echo "vote added";
-        } catch (Exception $e) {
-            echo "error" . $e->getMessage();
-        }
     }
 
     public function updateVote()
@@ -44,17 +38,12 @@ class Vote
                 SET optionId = :option_id
                 WHERE pollId = :poll_id AND userId = :user_id";
 
-        try {
             $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':user_id', $this->user_id);
 			$stmt->bindParam(':poll_id', $this->poll_id);
 			$stmt->bindParam(':option_id', $this->option_id);
             $stmt->execute();
 
-            echo "vote updated";
-        } catch (Exception $e) {
-            echo "error" . $e->getMessage();
-        }
     }
 
 
