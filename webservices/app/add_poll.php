@@ -32,7 +32,7 @@ try {
 					   "poll_id" => (int)$poll_id);
 					   
 	//get all user's tokens (who are enrolled in this group)
-	$sql = "";
+	$sql = "SELECT token FROM PushNotification WHERE userId in (SELECT userId from UserToGroup WHERE groupId = $group_id)";
 	$stmt = $conn->prepare($sql);
     $stmt->execute();
 	$num = $stmt->rowCount();
