@@ -17,13 +17,14 @@ INNER JOIN
 INNER JOIN (SELECT * from Poll WHERE groupId 
 IN
 (SELECT groupId FROM UserToGroup 
-WHERE userId = 'xxx')) as temp
+WHERE userId = :user_id)) as temp
 ON temp.groupId = GroupInfo.id) as tempo
 ON tempo.owner = UserInfo.id
 ";
 
 try {
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
 	$num = $stmt->rowCount();
 

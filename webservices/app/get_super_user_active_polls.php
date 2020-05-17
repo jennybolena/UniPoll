@@ -17,12 +17,13 @@ $sql = "SELECT GroupInfo.name, temp.* FROM GroupInfo
 				SELECT * from Poll 
 				WHERE groupId IN
 				(SELECT id FROM GroupInfo 
-				WHERE owner = $user_id)
+				WHERE owner = :user_id)
 				) as temp
 		ON temp.groupId = GroupInfo.id";
 
 try {
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
 	$num = $stmt->rowCount();
 
