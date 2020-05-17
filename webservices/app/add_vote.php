@@ -31,12 +31,12 @@ try{
     $num = $stmt->rowCount();
 
     $vote = new Vote($conn, $poll_id, $option_id, $user_id);
-    /*if($num == 1){
+    if($num == 1){
         $vote->updateVote();
     }else{
         $vote->addVote();
     }
-    */
+ 
     $return_msg=array(
         "status" => 1,
         "msg" => "user voted"

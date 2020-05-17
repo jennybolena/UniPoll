@@ -28,8 +28,8 @@ class Vote
         try {
             $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':user_id', $this->user_id);
-			$stmt->bindParam(':poll_id', (int)$this->poll_id);
-			$stmt->bindParam(':option_id', (int)$this->option_id);
+			$stmt->bindParam(':poll_id', $this->poll_id);
+			$stmt->bindParam(':option_id',$this->option_id);
             $stmt->execute();
 
             echo "vote added";
@@ -47,8 +47,8 @@ class Vote
         try {
             $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':user_id', $this->user_id);
-			$stmt->bindParam(':poll_id', (int)$this->poll_id);
-			$stmt->bindParam(':option_id', (int)$this->option_id);
+			$stmt->bindParam(':poll_id', $this->poll_id);
+			$stmt->bindParam(':option_id', $this->option_id);
             $stmt->execute();
 
             echo "vote updated";
