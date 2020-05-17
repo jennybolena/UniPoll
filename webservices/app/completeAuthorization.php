@@ -27,6 +27,7 @@ try{
     $stmt->execute();
 	$num = $stmt->rowCount();
 	
+	//user does not exist
 	if($num == 0){
 		//add user to db
 		$sql = "INSERT INTO UserInfo (id) VALUES (:user_id)";
@@ -43,12 +44,7 @@ try{
 		$stmt->execute();
 		
 		//add token
-		$sql = "INSERT INTO PushNotification (userId, token)
-											VALUES (:user_id, $token)";
-		$stmt = $conn->prepare($sql);
-	    $stmt->bindParam(':user_id', $user_id);
-	    //$stmt->bindParam(':device_token', $token);
-		$stmt->execute();
+		addToken($user_id, $token, $conn);
 	}else{
 		//user alredy exitsts, add token if user has logged from a new device
 		$sql = "SELECT * FROM PushNotification WHERE token = $token";
@@ -57,30 +53,38 @@ try{
 		$num = $stmt->rowCount();
 		
 		if($num == 0){
-			$sql = "INSERT INTO PushNotification (userId, token)
-											VALUES (:user_id, $token)";
-			$stmt = $conn->prepare($sql);
-	    	$stmt->bindParam(':user_id', $user_id);
-			$stmt->execute();
+			addToken($user_id, $token, $conn);
 		}
 	}
 	
-	
-	
-	
-	
-	
-	echo "done";
+	//check if user is super user
+	$sql = "SELECT isSuperUser FROM UserInfo WHERE id = :user_id";
+	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	extract($row);
+
+	 $return_msg = array("status" => 1, "user_id" => $user_id, "is_super_user" => (int)$isSuperUser);
+	 echo json_encode($return_msg);
 }catch(Exception $e){
-	return $return_msg = array("status" => 0,
-						        "msg" => "cannnot give you user details"
-				               );
+	return $return_msg = array("status" => 0, "msg" => "cannnot give you user details");
 	echo json_encode($return_msg);	
 }
 
 
 function hashMail($email){
+
 	
 	return 'sss';
+}
+
+
+function addToken($user_id, $token, $conn){
+			$sql = "INSERT INTO PushNotification (userId, token)
+											VALUES (:user_id, $token)";
+			$stmt = $conn->prepare($sql);
+	    	$stmt->bindParam(':user_id', $user_id);
+			$stmt->execute();
 }
 ?>
