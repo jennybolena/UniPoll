@@ -75,7 +75,6 @@ try{
 
 
 function hashMail($email){
-    $mail = preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $email);
     return sha1($mail);
 }
 
