@@ -46,8 +46,9 @@ try{
         addToken($user_id, $token, $conn);
     }else{
         //user alredy exitsts, add token if user has logged from a new device
-        $sql = "SELECT * FROM PushNotification WHERE token = $token AND userId = :user_id";
+        $sql = "SELECT * FROM PushNotification WHERE token = :token AND userId = :user_id";
         $stmt = $conn->prepare($sql);
+		$stmt->bindParam(':token', $token);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $num = $stmt->rowCount();
@@ -81,8 +82,9 @@ function hashMail($email){
 
 function addToken($user_id, $token, $conn){
     $sql = "INSERT INTO PushNotification (userId, token)	
-											VALUES (:user_id, $token)";
+											VALUES (:user_id, :token)";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':token', $token);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
 }
