@@ -1,5 +1,5 @@
 <?php
-
+header("Content-type:application/json");
     // Get student email
     $email = isset($_POST['email']) ? $_POST['email'] : die();
 
@@ -26,14 +26,13 @@
     $mail->Password = "22920276324story";
     $mail->setFrom("unipoll.info@gmail.com", "Unipoll");
     $mail->addAddress($email);
-    $mail->Subject = 'UniPoll verification PIN'; //todo Write a nice sentence
+    $mail->Subject = 'UniPoll authentication PIN'; 
     $mail->msgHTML("Authentication PIN: ". $pin);
     $mail->AltBody = "Authentication PIN: ". $pin;
     if(!$mail->send()){
-        echo json_encode(["status" => "0", "error_msg" => $mail->ErrorInfo]);
+        echo json_encode(["status" => "0", "error_msg" => "mail wan not sent"]);
     }else{
-        echo json_encode(["status" => "1", "pin" => $pin]);
-        storePinToDatabase($email, $pin);
+        echo json_encode(["status" => "1", "pin" => (int)$pin]);
     }
 
     // Generates a PIN
