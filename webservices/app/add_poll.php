@@ -15,10 +15,13 @@ $conn = $db->getConnection();
 
 //query to add poll
 $sql = "INSERT INTO Poll (groupId, question, endTime)
-		VALUES ($group_id, $question, $end_time)";
+		VALUES (:group_id, :question, :end_time)";
 
 try {
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
+	$stmt->bindParam(':question', $question);
+	$stmt->bindParam(':end_time', $end_time);
     $stmt->execute();
 
     //get id
@@ -31,8 +34,9 @@ try {
 					   "poll_id" => (int)$poll_id);
 					   
 	//get all user's tokens (who are enrolled in this group)
-	$sql = "SELECT token FROM PushNotification WHERE userId in (SELECT userId from UserToGroup WHERE groupId = $group_id)";
+	$sql = "SELECT token FROM PushNotification WHERE userId in (SELECT userId from UserToGroup WHERE groupId = :group_id)";
 	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':group_id', $group_id);
     $stmt->execute();
 	$num = $stmt->rowCount();
 
@@ -61,9 +65,12 @@ function addOptions($group_id, $poll_id, $options, $conn){
     $j = 1;
     foreach($options as &$value){
        $sql = "INSERT INTO OptionToPoll (optionId, pollId, _option)
-					VALUES ($j, $poll_id, $value)";
+					VALUES (:j, :poll_id, :value)";
 
             $stmt = $conn->prepare($sql);
+			$stmt->bindParam(':poll_id', $poll_id);
+			$stmt->bindParam(':j', $j);
+			$stmt->bindParam(':value', $value);
             $stmt->execute();
             $j = $j + 1;
         }
