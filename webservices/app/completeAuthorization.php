@@ -1,49 +1,57 @@
 <?php
-
-// Include necessary files
-include_once "../util/objects/config/Database.php";
+header("Content-type:application/json");
 
 // Get student email
 $email = isset($_POST['email']) ? $_POST['email'] : die();
 
 // Get mobile push notification token
-$email = isset($_POST['token']) ? $_POST['token'] : die();
+$token = isset($_POST['token']) ? $_POST['token'] : die();
 
-// Status variable used for knowing if everything was ok
-$is_process_successful = true;
 
-// Store student in database
-$database = new Database();
-$connection = $database->getConnection();
-$query = "write your query here"; //todo write your query here
-$stmt = $connection->prepare($query);
-if($stmt->execute()){
-    //todo write what happens when query is executed succesfully
-}else{
-    //todo write what happens when query fails
-    $is_process_successful = false;
+//include
+include_once '../util/objects/config/Database.php';
+
+
+//connection to db
+$db = new Database();
+$conn = $db->getConnection();
+
+
+$user_id = hashMail($email);
+try{
+	//check if user already exists
+	$sql = "SELECT * FROM UserInfo WHERE id = $user_id";
+	$stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $num = $stmt->rowCount();
+
+    if($num == 0){
+		//add user to db
+		$sql = "INSERT INTO UserInfo (id) VALUES ($user_id)";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute();
+		
+		//add automatically to groups AUEB and UNIPOLL
+		$sql = "INSERT INTO UserToGroup (userId, groupId)
+							VALUEs($user_id, '1'),
+								  ($user_id, '2') ";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute();
+	}
+	
+	//add token if user has logged from a new device
+	
+	echo "done";
+}catch(Exception $e){
+	return $msg = array("status" => 0,
+						"msg" => "cannnot give you user details");
+	
+	
 }
 
-// Store mobile push notification token in database
-$database = new Database();
-$connection = $database->getConnection();
-$query = "write your query here"; //todo write your query here
-$stmt = $connection->prepare($query);
-if($stmt->execute()){
-    //todo write what happens when query is executed succesfully
-}else{
-    //todo write what happens when query fails
-    $is_process_successful = false;
-}
 
-// Return json to let mobile device know if everything was successful
-if ($is_process_successful){
-    echo json_encode(
-        ["status" => "1"]
-    );
-}else{
-    echo json_encode(
-        ["status" => "0",
-         "error_msg" => "Server could not store given data"]
-    );
+public function hashMail($email){
+	
+	return 'sds';
 }
+?>
