@@ -9,7 +9,6 @@ $token = isset($_POST['token']) ? $_POST['token'] : die();
 
 $user_id = hashMail($email);
 
-
 //include
 include_once '../util/objects/config/Database.php';
 
@@ -47,8 +46,9 @@ try{
 		addToken($user_id, $token, $conn);
 	}else{
 		//user alredy exitsts, add token if user has logged from a new device
-		$sql = "SELECT * FROM PushNotification WHERE token = $token";
+		$sql = "SELECT * FROM PushNotification WHERE token = $token AND userId = :user_id";
 		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':user_id', $user_id);
     	$stmt->execute();
 		$num = $stmt->rowCount();
 		
@@ -74,9 +74,8 @@ try{
 
 
 function hashMail($email){
-
-	
-	return 'sss';
+    $mail = preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $email);
+	return sha1($mail);
 }
 
 
