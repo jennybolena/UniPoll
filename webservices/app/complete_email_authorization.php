@@ -75,7 +75,7 @@ try{
 
 
 function hashMail($email){
-    return sha1($mail);
+    return sha1($email);
 }
 
 

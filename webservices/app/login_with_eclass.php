@@ -125,7 +125,7 @@ function userAlreadyExist($user_id, $conn){
 }
 
 function hashMail($email){
-    return sha1($mail);
+    return sha1($email);
 }
 
 function addToken($user_id, $token, $conn){
