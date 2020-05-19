@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 /**
  * Used to send push notification for a new poll id
  */
-$user_id = isset($_POST['fcm_token']) ? $_POST['fcm_token'] : die("fcm_token is missing");
+$fcm_token = isset($_POST['fcm_token']) ? $_POST['fcm_token'] : die("fcm_token is missing");
 $notification_title = isset($_POST['notification_title']) ? $_POST['notification_title'] : die("notification_title is missing");
 $notification_description = isset($_POST['notification_description']) ? $_POST['notification_description'] : die("notification_description is missing");
 $new_poll_id = isset($_POST['new_poll_id']) ? $_POST['new_poll_id'] : die("new_poll_id is missing");
@@ -15,7 +15,7 @@ $GOOGLE_API_KEY = "AAAAeKmKJlw:APA91bHeqYgQcT0jFaFMgz6OBU57g9hDknwe8iRY-Oojn62tJ
 $GOOGLE_GCM_URL = "https://fcm.googleapis.com/fcm/send";
 
 $fields = array(
-    'to'       => $this->device_token,
+    'to'       => $fcm_token,
     'sound'    => 'default',
     'priority' => 'high',
     'data'	   => array(
