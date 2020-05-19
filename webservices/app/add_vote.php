@@ -44,7 +44,7 @@ try{
 } catch(Exception $e){
     $return_msg=array(
         "status" => 0,
-        "msg" => "user voted"
+        "msg" => "user didn't vote"
     );
 }
 

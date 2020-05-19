@@ -28,10 +28,11 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 $result = curl_exec($ch);
 $eclass_token = substr($result, strrpos($result, '>') + 1);
 if (curl_errno($ch)) {
-    echo 'Error:' . curl_error($ch);
+	$return_msg = array("status" => 0, "msg" => "error");
+	echo json_encode($return_msg);
+	return;
 }
 
-echo $eclass_token;
 curl_close($ch);
 
 
@@ -49,7 +50,9 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 $courses = curl_exec($ch);
 if (curl_errno($ch)) {
-    echo 'Error:' . curl_error($ch);
+    $return_msg = array("status" => 0, "msg" => "error");
+	echo json_encode($return_msg);
+	return;
 }
 curl_close($ch);
 
