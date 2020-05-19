@@ -7,6 +7,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+header("Content-type:application/json");
+
 $username = isset($_POST['username']) ? $_POST['username'] : die('username is missing');
 $password = isset($_POST['password']) ? $_POST['password'] : die('password is missing');
 $token = isset($_POST['token']) ? $_POST['token'] : die('token is missing');
@@ -26,11 +28,16 @@ $headers[] = 'Content-Type: application/x-www-form-urlencoded';
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 $result = curl_exec($ch);
-$eclass_token = substr($result, strrpos($result, '>') + 1);
+
 if (curl_errno($ch)) {
 	$return_msg = array("status" => 0, "msg" => "error");
 	echo json_encode($return_msg);
 	return;
+}
+
+$eclass_token = $result;
+if(strpos($result, ">") == true){
+    $eclass_token = substr($result, strrpos($result, '>') + 1);
 }
 
 curl_close($ch);
@@ -89,7 +96,7 @@ try{
 			$stmt->execute();
 	}
 
-	addToken($user_id, $token, $conn)
+	addToken($user_id, $token, $conn);
 
 	//add eclass groups
 	addEclassGroups($courses, $conn);
@@ -106,6 +113,7 @@ try{
 
 	$return_msg = array("status" => 1, "user_id" => $user_id, "is_super_user" => (int)$isSuperUser);
 	echo json_encode($return_msg);
+	
 	
 }catch(Exception $e){
 	$return_msg = array("status" => 0, "msg" => "error");
@@ -149,8 +157,8 @@ function addEclassGroups($all_courses, $conn){
 		$course_id = $course['code'];
 		$course_title = $course['title'];
 		$course_description = $course['description'];	
-	    $sql = "INSERT IGNORE INTO GroupInfo (id, name, description)"
-										VALUES (:course_id, :course_title, :course_description);
+	    $sql = "INSERT IGNORE INTO GroupInfo (id, name, description)
+										VALUES (:course_id, :course_title, :course_description)";
 		$stmt = $conn->prepare($sql);
 		$stmt->bindParam(':course_id', $course_id);
 		$stmt->bindParam(':course_title', $course_title);
@@ -160,14 +168,14 @@ function addEclassGroups($all_courses, $conn){
 	
 }
 
-function addUserToEclassGroups($user_id, $courses, $conn){
+function addUserToEclassGroups($user_id, $all_courses, $conn){
 	
 	$courses = new SimpleXMLElement($all_courses);
 	
 	foreach ($courses->coursegroup[0]->course as $course) {
 		$course_id = $course['code'];
-		$sql = "INSERT IGNORE INTO UserToGroup (userId, groupId)"
-									VALUES (:user_id, :course_id);
+		$sql = "INSERT IGNORE INTO UserToGroup (userId, groupId)
+									VALUES (:user_id, :course_id)";
 		$stmt = $conn->prepare($sql);
 		$stmt->bindParam(':course_id', $course_id);
 		$stmt->bindParam(':user_id', $user_id);
