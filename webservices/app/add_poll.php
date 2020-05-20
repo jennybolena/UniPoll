@@ -41,11 +41,10 @@ try {
 	$num = $stmt->rowCount();
 
 
-	$message = array("question" => $question);
     if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-			sendPushNotification($token, $message);
+			sendPushNotification($token, $question, $poll_id);
 		}
 	}
 			
@@ -76,8 +75,8 @@ function addOptions($group_id, $poll_id, $options, $conn){
         }
 }
 
-function sendPushNotification($token, $message){
-	$apiKey = '';
+function sendPushNotification($token, $question, $poll_id){
+	/*$apiKey = '';
 	$fields = array('to' => $token, 'notification' => $message);
 	$headers = array('Authorization: key=' .apiKey, 'Content-Type: application/json');
 	$url = '';
@@ -91,6 +90,35 @@ function sendPushNotification($token, $message){
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 	
 	curl_exec($ch);
+	curl_close($ch);*/
+	
+	$GOOGLE_API_KEY = "AAAAeKmKJlw:APA91bHeqYgQcT0jFaFMgz6OBU57g9hDknwe8iRY-Oojn62tJuYlJS6_zGCCovnKzws-dQVMzyr5a79frnTNI2WlP2x1PHqPpBL_PF04D4DaH1mFtz1ZwEEQLnKU27-zWAMvECTpoYb5";
+	$GOOGLE_GCM_URL = "https://fcm.googleapis.com/fcm/send";
+
+	$fields = array(
+		'to'       => $token,
+		'sound'    => 'default',
+		'priority' => 'high',
+		'data'	   => array(
+			"title"          => $question,
+			"new_poll_id" => $new_poll_id
+		)
+	);
+
+	$headers = array(
+		$GOOGLE_GCM_URL,
+		'Content-Type: application/json',
+		'Authorization: key='.$GOOGLE_API_KEY
+	);
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $GOOGLE_GCM_URL);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+	$result = curl_exec($ch);
 	curl_close($ch);
 }
 
