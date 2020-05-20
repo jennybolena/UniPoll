@@ -76,22 +76,6 @@ function addOptions($group_id, $poll_id, $options, $conn){
 }
 
 function sendPushNotification($token, $question, $poll_id){
-	/*$apiKey = '';
-	$fields = array('to' => $token, 'notification' => $message);
-	$headers = array('Authorization: key=' .apiKey, 'Content-Type: application/json');
-	$url = '';
-	
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );
-	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-	
-	curl_exec($ch);
-	curl_close($ch);*/
-	
 	$GOOGLE_API_KEY = "AAAAeKmKJlw:APA91bHeqYgQcT0jFaFMgz6OBU57g9hDknwe8iRY-Oojn62tJuYlJS6_zGCCovnKzws-dQVMzyr5a79frnTNI2WlP2x1PHqPpBL_PF04D4DaH1mFtz1ZwEEQLnKU27-zWAMvECTpoYb5";
 	$GOOGLE_GCM_URL = "https://fcm.googleapis.com/fcm/send";
 
@@ -101,7 +85,7 @@ function sendPushNotification($token, $question, $poll_id){
 		'priority' => 'high',
 		'data'	   => array(
 			"title"          => $question,
-			"new_poll_id" => $new_poll_id
+			"new_poll_id" => $poll_id
 		)
 	);
 
