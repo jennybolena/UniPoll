@@ -101,7 +101,7 @@ function sendPushNotification($token, $question, $poll_id){
 		'priority' => 'high',
 		'data'	   => array(
 			"title"          => $question,
-			"new_poll_id" => $new_poll_id
+			"new_poll_id" => $poll_id
 		)
 	);
 
