@@ -42,12 +42,12 @@ try {
 	$num = $stmt->rowCount();
 
 
-    if($num != 0){
+   /* if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
 			sendPushNotification($token, $question, $poll_id);
 		}
-	}
+	}*/
 			
 					   
 	echo json_encode($return_msg);
@@ -76,7 +76,7 @@ function addOptions($group_id, $poll_id, $options, $conn){
         }
 }
 
-function sendPushNotification($token, $question, $poll_id){
+/*function sendPushNotification($token, $question, $poll_id){
 	$GOOGLE_API_KEY = "AAAAeKmKJlw:APA91bHeqYgQcT0jFaFMgz6OBU57g9hDknwe8iRY-Oojn62tJuYlJS6_zGCCovnKzws-dQVMzyr5a79frnTNI2WlP2x1PHqPpBL_PF04D4DaH1mFtz1ZwEEQLnKU27-zWAMvECTpoYb5";
 	$GOOGLE_GCM_URL = "https://fcm.googleapis.com/fcm/send";
 
@@ -105,6 +105,6 @@ function sendPushNotification($token, $question, $poll_id){
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 	$result = curl_exec($ch);
 	curl_close($ch);
-}
+}*/
 
 ?>
