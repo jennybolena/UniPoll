@@ -6,10 +6,10 @@ $question = isset($_POST['question']) ? $_POST['question'] : die("question is mi
 $end_time = isset($_POST['end_time']) ? $_POST['end_time'] : die("end_time is missing");
 $options_ = isset($_POST['options']) ? $_POST['options'] : die("option is missing");
 
-echo "1";
-$options = json_decode($options_);
+$options= json_decode($options_, true);
 
-echo "2";
+
+
 
 //include
 include_once '../util/objects/config/Database.php';
@@ -22,9 +22,10 @@ $conn = $db->getConnection();
 $sql = "INSERT INTO Poll (groupId, question, endTime)
 		VALUES (:group_id, :question, :end_time)";
 
+
 try {
     $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':user_id', $user_id);
+	$stmt->bindParam(':group_id', $group_id);
 	$stmt->bindParam(':question', $question);
 	$stmt->bindParam(':end_time', $end_time);
     $stmt->execute();
@@ -34,7 +35,7 @@ try {
 
     addOptions($group_id, (int)$poll_id, $options, $conn);
 
-
+	
     $return_msg = array("status" => 1,
 					   "poll_id" => (int)$poll_id);
 					   
@@ -46,12 +47,12 @@ try {
 	$num = $stmt->rowCount();
 
 
-   /* if($num != 0){
+    if($num != 0){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
 			sendPushNotification($token, $question, $poll_id);
 		}
-	}*/
+	}
 			
 					   
 	echo json_encode($return_msg);
@@ -64,10 +65,12 @@ try {
 
 $db->closeConnection();
 
+	
+	
 
 function addOptions($group_id, $poll_id, $options, $conn){
     $j = 1;
-    foreach($options as &$value){
+    foreach($options as $value){
        $sql = "INSERT INTO OptionToPoll (optionId, pollId, _option)
 					VALUES (:j, :poll_id, :value)";
 
@@ -80,7 +83,7 @@ function addOptions($group_id, $poll_id, $options, $conn){
         }
 }
 
-/*function sendPushNotification($token, $question, $poll_id){
+function sendPushNotification($token, $question, $poll_id){
 	$GOOGLE_API_KEY = "AAAAeKmKJlw:APA91bHeqYgQcT0jFaFMgz6OBU57g9hDknwe8iRY-Oojn62tJuYlJS6_zGCCovnKzws-dQVMzyr5a79frnTNI2WlP2x1PHqPpBL_PF04D4DaH1mFtz1ZwEEQLnKU27-zWAMvECTpoYb5";
 	$GOOGLE_GCM_URL = "https://fcm.googleapis.com/fcm/send";
 
@@ -109,6 +112,6 @@ function addOptions($group_id, $poll_id, $options, $conn){
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 	$result = curl_exec($ch);
 	curl_close($ch);
-}*/
+}
 
 ?>
