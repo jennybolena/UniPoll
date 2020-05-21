@@ -5,7 +5,11 @@ $group_id = isset($_POST['group_id']) ? $_POST['group_id'] : die("group_id is mi
 $question = isset($_POST['question']) ? $_POST['question'] : die("question is missing");
 $end_time = isset($_POST['end_time']) ? $_POST['end_time'] : die("end_time is missing");
 $options_ = isset($_POST['options']) ? $_POST['options'] : die("option is missing");
+
+echo "1";
 $options = json_decode($options_);
+
+echo "2";
 
 //include
 include_once '../util/objects/config/Database.php';
