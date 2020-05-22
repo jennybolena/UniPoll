@@ -31,7 +31,7 @@ if (curl_errno($ch)) {
 }
 
 if($result == "FAILED"){
-	$return_msg = array("status" => 0, "msg" => "username or password is incorect");
+	$return_msg = array("status" => 0, "msg" => "username or password is incorrect");
 	echo json_encode($return_msg);
 	die();
 }
