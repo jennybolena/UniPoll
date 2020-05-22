@@ -183,4 +183,9 @@ function addUserToEclassGroups($user_id, $all_courses, $conn){
 		$stmt->execute();
 	}
 }
+<<<<<<< HEAD
 ?>
+=======
+
+?>
+>>>>>>> 7b965dea8e5bcf5192f8053125c28451e91ea0fa
