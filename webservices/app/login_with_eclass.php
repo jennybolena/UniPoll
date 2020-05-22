@@ -3,10 +3,6 @@
  * Use this webservice to get e-class token.
  */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header("Content-type:application/json");
 
 $username = isset($_POST['username']) ? $_POST['username'] : die('username is missing');
@@ -28,11 +24,16 @@ $headers[] = 'Content-Type: application/x-www-form-urlencoded';
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 $result = curl_exec($ch);
-
 if (curl_errno($ch)) {
 	$return_msg = array("status" => 0, "msg" => "error");
 	echo json_encode($return_msg);
-	return;
+	die();
+}
+
+if($result == "FAILED"){
+	$return_msg = array("status" => 0, "msg" => "username or password is incorect");
+	echo json_encode($return_msg);
+	die();
 }
 
 $eclass_token = $result;
@@ -59,7 +60,7 @@ $courses = curl_exec($ch);
 if (curl_errno($ch)) {
     $return_msg = array("status" => 0, "msg" => "error");
 	echo json_encode($return_msg);
-	return;
+	die();
 }
 curl_close($ch);
 
@@ -182,5 +183,4 @@ function addUserToEclassGroups($user_id, $all_courses, $conn){
 		$stmt->execute();
 	}
 }
-
 ?>
