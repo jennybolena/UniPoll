@@ -30,9 +30,9 @@ header("Content-type:application/json");
     $mail->msgHTML("Authentication PIN: ". $pin);
     $mail->AltBody = "Authentication PIN: ". $pin;
     if(!$mail->send()){
-        echo json_encode(["status" => "0", "error_msg" => "mail wan not sent"]);
+        echo json_encode(["status" => 0, "error_msg" => "mail was not sent"]);
     }else{
-        echo json_encode(["status" => "1", "pin" => $pin]);
+        echo json_encode(["status" => 1, "pin" => $pin]);
     }
 
     // Generates a PIN
