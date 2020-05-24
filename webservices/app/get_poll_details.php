@@ -22,6 +22,7 @@ try {
     $all_data['question'];
     $all_data['author'];
     $all_data['poll_stats'] = array();
+	$all_data['end_time'];
     $all_data['user_vote_id'] = 0;
     
     $stmt = $conn->prepare($sql);
@@ -84,6 +85,18 @@ try {
 	 extract($row);
 	 if ($num == 1) {
 		$all_data['author'] = $author;
+	 }
+	 
+	 //get poll end time
+	 $sql = "SELECT endTime FROM Poll WHERE id = :poll_id"; 
+	 $stmt = $conn->prepare($sql);
+	 $stmt->bindParam(':poll_id', $poll_id);
+     $stmt->execute();
+	 $num = $stmt->rowCount();
+	 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+	 extract($row);
+	 if ($num == 1) {
+		$all_data['end_time'] = $endTime;
 	 }
 	
 	echo json_encode($all_data);
