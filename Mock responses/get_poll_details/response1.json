@@ -1,0 +1,19 @@
+{
+    "status": 1,
+    "poll_id": 3,
+    "poll_stats": [
+        {
+            "option_id": 1,
+            "option": "yes",
+            "votes": 0
+        },
+        {
+            "option_id": 2,
+            "option": "no",
+            "votes": 1
+        }
+    ],
+    "user_vote_id": 2,
+    "question": "have you passed c++",
+    "author": "uniPollUser"
+}

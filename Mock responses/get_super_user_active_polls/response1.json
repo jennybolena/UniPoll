@@ -1,0 +1,21 @@
+{
+    "status": 1,
+    "data": [
+        {
+            "poll_id": 2,
+            "group_id": "2",
+            "tag": "unipoll group",
+            "title": "rate our app",
+            "time_created": "2020-05-14 16:47:44",
+            "time_ended": "2021-01-01 15:05:05"
+        },
+        {
+            "poll_id": 3,
+            "group_id": "3",
+            "tag": "C++",
+            "title": "have you passed c++",
+            "time_created": "2020-05-14 16:47:44",
+            "time_ended": "2021-01-01 15:05:05"
+        }
+    ]
+}
