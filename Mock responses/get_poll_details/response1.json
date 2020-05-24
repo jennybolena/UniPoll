@@ -15,5 +15,6 @@
     ],
     "user_vote_id": 2,
     "question": "have you passed c++",
-    "author": "uniPollUser"
+    "author": "uniPollUser",
+    "end_time": "2021-01-01 15:05:05"
 }
